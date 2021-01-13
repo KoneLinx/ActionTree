@@ -13,7 +13,7 @@ Actions can also be combined together.
 ```c++
 action_A | action_B
 ```
-This result in a new action that, when called, calls these two action, in sequence.
+This result is a new action that, when called, calls these two actions, in sequence.
 The returned type depends in the returned types of two actions used.
 
 Old types | New type
