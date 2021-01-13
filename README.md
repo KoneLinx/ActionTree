@@ -1,8 +1,8 @@
 # ActionTree
-Tree based decision making and action performing structure
 
-<img src="https://github.com/KobeVrijsenStudentHowest/ActionTree/blob/main/cent.png" alt="One cent" width="32" height="32"/>
+Tree based decision making and action performing structure.
 
+# Documentation
 
 ## Actions
 
@@ -87,7 +87,7 @@ This combination results in an action. to bind mutiple action together, you must
 
 As you would expect, and if/else branch can also be created.
 
-Since the ternary ` ? : ` operator cannot be overloaded, an different solution has to be used:
+Since the ternary ` ? : ` operator cannot be overloaded, a different solution has to be used:
 ```c++
 decision && action_yes || action_no
 ```
@@ -139,11 +139,11 @@ The visitor provied in this library is specially built to ease the usage of opti
   * T is not default constrcutable
     * <span style="color:red">*Illformed*</span>. static_assert.
     
-### variant<A, B>
+### `variant<A, B>`
 
-* 'A' is active
+* `A` is active
   * `operator()(A)` is called.
-* 'B' is active
+* `B` is active
   * `operator()(B)` is called.
   
 The return type will be whatever these calls return.
