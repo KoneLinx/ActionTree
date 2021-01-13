@@ -14,7 +14,7 @@ Actions can also be combined together.
 action_A | action_B
 ```
 This result in a new action that, when called, calls these two action, in sequence.
-Thre returned type depends in the returned types of two actions used.
+The returned type depends in the returned types of two actions used.
 
 Old types | New type
 --- | ---
