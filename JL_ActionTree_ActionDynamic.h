@@ -34,6 +34,7 @@ namespace JL::action_tree
 	template <typename R, typename ... P>
 	struct ActionDynamic<R(P...)> : std::function<R(P...)>
 	{
+		explicit             ActionDynamic () = default;
 		template<typename T>
 		explicit             ActionDynamic (Action<T>);
 		TEMPLATE /* This& */ operator =    (Action<T>);
