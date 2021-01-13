@@ -122,6 +122,18 @@ This will make a new action that returns the visitors return type. When called t
 
 The visitor provied in this library is specially built to ease the usage of optional and variant.
 
+The visitor can be called with the following typed as single parameter
+
+### `void`
+
+* `operator()(void)` is called.
+  * *this is up to you to implement, if it is required*
+
+### `T`
+
+* `operator()(T)` is called.
+  * *this is up to you to implement, if it is required*
+
 ### `optional<T>`
 
 * Visitor has `operator()(void)`
