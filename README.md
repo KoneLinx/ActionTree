@@ -45,7 +45,7 @@ Though, be aware that when the return types do not match up, they may end up nes
 Decisions are simmilar to actions. They also take paramaters but instead return a boolean value. Decisions are used to control the actions and branches that are executed.
 
 ```c++
-Action action{
+Decision decision{
   /*labda expression*/
   [ /*captures*/ ]
   ( /*parameters*/ ) -> bool
@@ -135,7 +135,7 @@ Also watch out for non matching types so the results don't get nested too deeply
 Visitors are functions that take the result of the action they are combined with and return an new result.
 
 ```c++
-Action action{
+Visitor visitor{
 
   // labda expression 1
   [ /*captures*/ ]
