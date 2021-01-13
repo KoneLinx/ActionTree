@@ -3,6 +3,8 @@
 #include "JL_ActionTree.h"
 using namespace JL::action_tree;
 
+#include "JL_Visitor.h"
+
 #define CATCH_CONFIG_MAIN
 #include "../catch2/catch.hpp"
 
@@ -92,6 +94,22 @@ TEST_CASE("Test Action")
 
 	}
 
+	{
+
+		// Test visitor
+
+		using JL::Visitor;
+
+		Visitor visitor{ [](int i) { return float(i * 10); } };
+		Action  action { [](int i) { return i *  5; } };
+
+		auto sequence = action | visitor;
+
+		REQUIRE_TYPE(float, sequence(0));
+		REQUIRE(sequence(1) == 50);
+
+	}
+
 }
 
 TEST_CASE("Test Decision")
@@ -123,6 +141,7 @@ TEST_CASE("Test Decision")
 		}
 
 	}
+
 }
 
 TEST_CASE("Test conditional Action")
@@ -134,11 +153,12 @@ TEST_CASE("Test conditional Action")
 		auto conditionalNothing = isEven & makeNothing;
 		auto conditionalValue   = isEven & makeValue;
 
-		REQUIRE_TYPE(void, conditionalNothing(0));
-		REQUIRE_TYPE(Value, conditionalValue(0));
+		using Maybe = impl::Maybe<Value>;
+		REQUIRE_TYPE(void , conditionalNothing(0));
+		REQUIRE_TYPE(Maybe, conditionalValue(0));
 
-		REQUIRE(conditionalValue(2).value == 2            );
-		REQUIRE(conditionalValue(1).value == Value{}.value);
+		REQUIRE(conditionalValue(2).value_or(Value{-1}).value ==  2);
+		REQUIRE(conditionalValue(1).value_or(Value{-1}).value == -1);
 
 	}
 
@@ -160,6 +180,31 @@ TEST_CASE("Test conditional Action")
 		decide(true ); REQUIRE(state ==  0);
 		decide(false); REQUIRE(state == -1);
 		decide(true ); REQUIRE(state ==  1);
+
+	}
+
+	{
+
+		// Test visitor
+
+		using JL::Visitor;
+
+		Visitor  visitor  { [](int i) { return Value{i * 10}; } };
+		Visitor  visitorV {
+			[](int i = 0) { return Value{i * 10}; }
+		};
+		Action   action  { [](int i) { return i * 5; } };
+		Decision decision{ [](int i) { return i != 0; } };
+
+		auto sequence  = decision & action | visitor ;
+		auto sequenceV = decision & action | visitorV;
+
+		REQUIRE_TYPE(Value, sequence (0));
+		REQUIRE_TYPE(Value, sequenceV(0));
+		REQUIRE(sequence (1).value == 50);
+		REQUIRE(sequence (0).value == Value{}.value);
+		REQUIRE(sequenceV(1).value == 50);
+		REQUIRE(sequenceV(0).value == 0);
 
 	}
 
@@ -187,11 +232,17 @@ TEST_CASE("Test Branch")
 	REQUIRE(eitherValue(0).value == 0);
 
 	auto five = eitherType(5);
-	REQUIRE(five.first .has_value() == true );
-	REQUIRE(five.second.has_value() == false);
+	REQUIRE(five.index() == 0);
+
 	auto zero = eitherType(0);
-	REQUIRE(zero.first .has_value() == false);
-	REQUIRE(zero.second.has_value() == true );
+	if (zero.index() != 1)
+	{
+		REQUIRE(zero.index() == 1);	// Always false
+	}
+	else
+	{
+		REQUIRE(std::get<1>(zero).value == 0);
+	}
 
 	REQUIRE(eitherTrue (5).has_value() == true );
 	REQUIRE(eitherTrue (0).has_value() == false);
@@ -224,20 +275,44 @@ TEST_CASE("Test branch stack")
 	}
 
 	{
+
 		// Different return types
 
 		auto stack = select(0) && makeValue || select(1) && makeAddable || makeNonDefault;
 
 		using Pair = impl::Either<Value, impl::Either<Addable, NonDefault>>;
 		REQUIRE_TYPE(Pair, stack(0));
-		REQUIRE(stack(0).first .has_value() == true );
-		REQUIRE(stack(0).second.has_value() == false);
-		REQUIRE(stack(1).second.has_value() == true );
-		REQUIRE(stack(1).second.value().first .has_value() == true );
-		REQUIRE(stack(1).second.value().second.has_value() == false);
-		REQUIRE(stack(2).second.value().first .has_value() == false);
-		REQUIRE(stack(2).second.value().second.has_value() == true );
+		
+		REQUIRE(stack(0).index() == 0);
+
+		if (stack(1).index() != 1 || stack(2).index() != 1)
+		{
+			REQUIRE(stack(1).index() == 1);	// Always false
+			REQUIRE(stack(2).index() == 1);	// Always false
+		}
+		else
+		{
+			REQUIRE(std::get<1>(stack(1)).index() == 0);
+			REQUIRE(std::get<1>(stack(2)).index() == 1);
+		}
 
 	}
+
+}
+
+TEST_CASE("Test dynamic action")
+{
+
+	Action half{ [](int i) { return float(i) / 2.f; } };
+	Action sqr { [](int i) { return float(i) * float(i); } };
+
+
+	ActionDynamic<float(int)> act{ half };
+	REQUIRE_TYPE(float, act(0));
+
+	REQUIRE(act(3) == 1.5f);
+	
+	act = sqr;
+	REQUIRE(act(3) == 9.0f);
 
 }

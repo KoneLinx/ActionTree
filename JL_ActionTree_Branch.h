@@ -77,22 +77,22 @@ namespace JL::action_tree::impl
 				else
 				if constexpr (std::is_void_v<Ra>)
 				{
-					using Optional = std::optional<Rb>;
-					return test ? (a.action(p...), Optional{}) : Optional{ b(p...) };
+					using Maybe = impl::Maybe<Rb>;
+					return test ? (a.action(p...), Maybe{}) : Maybe{ b(p...) };
 				}
 				else
 				if constexpr (std::is_void_v<Rb>)
 				{
-					using Optional = std::optional<Ra>;
-					return test ? Optional{ a.action(p...) } : (b(p...), Optional{});
+					using Maybe = impl::Maybe<Ra>;
+					return test ? Maybe{ a.action(p...) } : (b(p...), Maybe{});
 				}
 				else
 				{
 					using Either = Either<Ra, Rb>;
 					if (a.decision(p...))
-						return Either{ a.action(p...), std::nullopt };
+						return Either{ a.action(p...) };
 					else
-						return Either{ std::nullopt  , b(p...)      };
+						return Either{ b(p...) };
 				}
 			}
 		};

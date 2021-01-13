@@ -164,14 +164,9 @@ namespace JL::action_tree
 					return;
 				}
 				else
-				if constexpr (std::is_default_constructible_v<R>)
 				{
-					return d(p...) ? a(p...) : R();
-				}
-				else
-				{
-					static_assert(false, "Cannot default construct return type, please provide 'else' case.");
-					return;
+					using Maybe = impl::Maybe<R>;
+					return d(p...) ? Maybe{ a(p...) } : Maybe{};
 				}
 			}
 		};

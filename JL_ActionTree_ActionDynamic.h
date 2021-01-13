@@ -34,15 +34,23 @@ namespace JL::action_tree
 	template <typename R, typename ... P>
 	struct ActionDynamic<R(P...)> : std::function<R(P...)>
 	{
-		using std::function<R(P...)>::function;
-
-		TEMPLATE /* This& */ operator = (Action<T>);
+		template<typename T>
+		explicit             ActionDynamic (Action<T>);
+		TEMPLATE /* This& */ operator =    (Action<T>);
 	};
+
 
 };
 
 namespace JL::action_tree
 {
+
+	template<typename R, typename ...P>
+	template<typename T>
+	ActionDynamic<R(P...)>::ActionDynamic(Action<T> action)
+	{
+		operator=(std::move(action));
+	}
 
 	template <typename R, typename ... P>
 	template <typename T>
@@ -52,10 +60,10 @@ namespace JL::action_tree
 		{
 			return std::function<R(P...)>::operator=(
 				[a = std::move(a)]
-			(P ... p) mutable->R
-			{
-				return a(p...);
-			}
+				(P ... p) mutable->R
+				{
+					return a(p...);
+				}
 			);
 		}
 		else static_assert(false, "ActionDynamic::operator=(Action)  Action does not return the correct type.");

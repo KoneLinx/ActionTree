@@ -25,12 +25,14 @@
 #include <functional>
 #include <tuple>
 #include <optional>
+#include <variant>
 
 namespace JL::action_tree
 {
 
 	#define TEMPLATE  template <typename T> auto
 	#define TEMPLATE2 template <typename T1, typename T2> auto
+	#define TEMPLATEV template <typename ...T> auto
 
 	namespace impl
 	{
@@ -45,7 +47,10 @@ namespace JL::action_tree
 		Functor(T)->Functor<T>;
 		
 		template <typename A, typename B>
-		using Either = std::pair<std::optional<A>, std::optional<B>>;
+		using Either = std::variant<A, B>;
+
+		template <typename A>
+		using Maybe  = std::optional<A>;
 
 	}
 

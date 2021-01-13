@@ -23,6 +23,7 @@
 #pragma once
 
 #include "JL_ActionTree_Base.h"
+#include "JL_Visitor.h"
 
 namespace JL::action_tree
 {
@@ -30,7 +31,8 @@ namespace JL::action_tree
 	template <typename F>
 	struct Action : impl::Functor<F>
 	{
-		TEMPLATE  /* Action */ operator |  (Action<T>);
+		TEMPLATE  /* Action */ operator |  (Action <T   >);
+		TEMPLATEV /* Action */ operator |  (Visitor<T...>);
 	};
 
 	template <typename T>
@@ -83,6 +85,20 @@ namespace JL::action_tree
 					return a(p...) + b(p...);
 				else										// {A, B}
 					return std::pair{ a(p...), b(p...) };
+			}
+		};
+		return Action<decltype(f)>{ std::move(f) };
+	}
+
+	template <typename _T>
+	template <typename ...T>
+	auto Action<_T>::operator|(Visitor<T...> visitor)
+	{
+		auto f{
+			[a = *this, v = std::move(visitor)]
+			(auto&& ... p) mutable
+			{
+				return v(a(p...));
 			}
 		};
 		return Action<decltype(f)>{ std::move(f) };
