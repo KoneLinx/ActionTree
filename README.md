@@ -8,6 +8,16 @@ Tree based decision making and action performing structure.
 
 Actions perform an action. They can be seen as a function that takes parameters return a result. That is pretty much all there is to explain about what they do.
 
+```c++
+Action action{
+  /*labda expression*/
+  [ /*captures*/ ]
+  ( /*parameters*/ ) -> T
+  { /*code*/ }
+}
+```
+The lambda may have any capture, parameter, mutability, and return type. There are no restrictions
+
 Actions can also be combined together.
 
 ```c++
@@ -33,6 +43,16 @@ Though, be aware that when the return types do not match up, they may end up nes
 ## Decisions
 
 Decisions are simmilar to actions. They also take paramaters but instead return a boolean value. Decisions are used to control the actions and branches that are executed.
+
+```c++
+Action action{
+  /*labda expression*/
+  [ /*captures*/ ]
+  ( /*parameters*/ ) -> bool
+  { /*code*/ }
+}
+```
+The lambda may have any capture, parameter and mutability. However, the return type must be convertible to bool.
 
 Just like actions, decisions can be combined together:
 ```c++
@@ -113,6 +133,24 @@ Also watch out for non matching types so the results don't get nested too deeply
 ## Visitors
 
 Visitors are functions that take the result of the action they are combined with and return an new result.
+
+```c++
+Action action{
+
+  // labda expression 1
+  [ /*captures*/ ]
+  ( /*parameters*/ ) -> bool
+  { /*code*/ },
+  
+  // labda expression 2
+  /* ... */
+ 
+  // labda expression N
+  /* ... */
+ 
+}
+```
+Visitors can be constructed with any amount of lambdas, which can all have different states return types. Provided that none have the same input paramaters.
 
 To add a visitor to the output of an action:
 ```c++
