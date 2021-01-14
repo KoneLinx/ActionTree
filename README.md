@@ -46,6 +46,12 @@ action | action | action | ...
 ```
 Though, be aware that when the return types do not match up, they may end up nested in multiple pairs.
 
+Examples:
+```c++
+sayHello | sayWorld    // says "Hello", next, says "World"
+getMean | getMedian    // gets a mean, next a median. Returns a pair of them (Let's say the types are different).
+```
+
 ## Decisions
 
 Decisions are simmilar to actions. They also take paramaters but instead return a boolean value. Decisions are used to control the actions and branches that are executed.
@@ -130,6 +136,13 @@ decision +(action_a | action_b)  // This line is practically ...
 decision +action_a +action_b     // ... equal to this line 
 ```
 
+Examples:
+```c++
+!bottle_filled & fill_bottle         // For as long the bottle isn't filled, keep filling it.
+!is_eof -close_file & read_line      // Is not EOF? Yes: read line. From the moment file is EOF: close file.
+is_light_on -turn_light_on           // When the light goes out, turn it on again.
+```
+
 ## Branches
 
 As you would expect, and if/else branch can also be created.
@@ -156,6 +169,14 @@ decision_1 && action_1 || decision_2 && action_2 || action_none
 ```
 Or possibly even longer.
 Also watch out for non matching types so the results don't get nested too deeply.
+
+Examples:
+```c++
+is_airbourne && fall || run            // Will fall when in the air, run when on the ground
+needs_something && search || explore   // When something is needed, search, otherwise explore.
+// Is the button pressed? Yes: +1 *BEEEEP*   No:  Is it pressed two times already? No: nothing  Yes: turn red and flash
+pressed +press_count && beep || pressed_twice +turn_red & flash
+```
 
 ## Visitors
 
@@ -226,4 +247,9 @@ The visitor can be called with the following typed as single parameter
 The return type will be whatever these calls return.
 
 This can be used to undo the possible `optional` and `variant` objects that are created in the previous actions:
+
+```c++
+stream_open & read_stream | parse_input                              // Is the stream open? Yes:  read input from the stream,   next parse the input
+(in_memory && get_from_memory || get_from_file) | transform_data     // Get data from memory or file, then transform it
+```
       
