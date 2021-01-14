@@ -18,6 +18,12 @@ Action action{
 ```
 The lambda may have any capture, parameter, mutability, and return type. There are no restrictions
 
+Actions inherit from the lambda or functor object that has been given to them and can always be called with the `operator()`. They will return the result of their sub call.
+```
+result = action(param...);
+```
+When calling an action, be sure to pass in the correct argument types. If compile errors occur, verify whether the arguments really are correct.
+
 Actions can also be combined together.
 
 ```c++
