@@ -117,6 +117,13 @@ op | on
 `+` | false -> true
 `-` | true -> false
 
+We can bind any number of actions
+```c++
+decision +action_on -action_off
+decision +(action_a | action_b)  // This line is practically ...
+decision +action_a +action_b     // ... equal to this line 
+```
+
 ## Branches
 
 As you would expect, and if/else branch can also be created.
