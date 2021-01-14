@@ -18,7 +18,7 @@ Action action{
 ```
 The lambda may have any capture, parameter, mutability, and return type. There are no restrictions
 
-Actions inherit from the lambda or functor object that has been given to them and can always be called with the `operator()`. They will return the result of their sub call.
+Actions inherit from the lambda or functor object that has been given to them and can always be called with the `operator()`. They will return the result of their inherited `operator()`.
 ```
 result = action(param...);
 ```
