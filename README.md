@@ -103,6 +103,20 @@ This combination results in an action. to bind mutiple action together, you must
 (decision | decision) & (action | action)
 ```
 
+Actions can also be bound to state changes of a decision.
+```c++
+decision +action_on
+decision -action_off
+```
+This will activate action when the result of the decision changed compared to it's previous state.
+
+It forms a new decision that first call its decision, and if the state changed compared to the previous state, action is called. The returned result of the action is discarded and the decision's state is returned.
+
+op | on
+---|---
+`+` | false -> true
+`-` | true -> false
+
 ## Branches
 
 As you would expect, and if/else branch can also be created.
@@ -139,7 +153,7 @@ Visitor visitor{
 
   // labda expression 1
   [ /*captures*/ ]
-  ( /*parameters*/ ) -> bool
+  ( /*parameters*/ )
   { /*code*/ },
   
   // labda expression 2
