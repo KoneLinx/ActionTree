@@ -264,4 +264,6 @@ This is also the case for branches accumulating variants (`variant<A, variant<B,
 
 ## Known bugs
 
-Currently, when moving/copying a visitor with two or more lambda objects, which is what happens internally, may corrupt the stack. The cause is being investigated.
+~~Currently, when moving/copying a visitor with two or more lambda objects, which is what happens internally, may corrupt the stack. The cause is being investigated.~~
+I have no idea how I fixed this. But I fixed it.
+
