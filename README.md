@@ -253,3 +253,15 @@ stream_open & read_stream | parse_input                              // Is the s
 (in_memory && get_from_memory || get_from_file) | transform_data     // Get data from memory or file, then transform it
 ```
       
+## Future changes
+
+Combined action with equal types return the sum of the returned values. This may not fit in all use cases, so a better way is begin sought after.
+It could be changed to `|` instead. Or a custom operator might be asked for.
+
+Actions may also return pairs. This may be changed in the future to tuples that are also extended when going through mutiple layers.
+Instead of `pair<A, pair<B, C>>`, it would be better off being `tuple<A, B, C>`.
+This is also the case for branches accumulating variants (`variant<A, variant<B, C>>`). They too might be reduced to one variant instead (`variant<A, B, C>`).
+
+## Known bugs
+
+Currently, when moving/copying a visitor with two or more lambda objects, which is what happens internally, may corrupt the stack. The cause is being investigated.
