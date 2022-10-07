@@ -1,6 +1,32 @@
 # ActionTree
 
-Tree based decision making and action performing structure.
+Tree based decision making and action performing structure. Also an alternative to writing a branches yourself.
+
+Readable, adjustable, replacable, modular. 
+
+```c++
+auto action{ 
+  isDataQueued +openFile -closeFile 
+  & readFromQueue | serialize | writeToFile
+};
+ 
+//auto action = [open = false] () mutable
+//{
+//    bool isQueued = isDataQueued();
+//    if (open != isQueued)
+//    {
+//        open = isQueued;
+//        if (open)
+//            openFile();
+//        else
+//            closeFile();
+//    }
+//    if (open)
+//    {
+//        writeToFile(serialize(readFromQueue()));
+//    }
+//};
+```
 
 # Documentation
 
