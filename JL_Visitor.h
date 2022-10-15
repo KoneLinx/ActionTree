@@ -1,24 +1,10 @@
-// Visitor.h - Visitor structure.
-/*
-   Copyright (C) 2021 Kobe Vrijsen
-
-   this file is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 3.0 of the License, or (at your option) any later version.
-
-   This file is made available in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, see
-   <https://www.gnu.org/licenses/>.
-
-   Author :   KoneLinx
-   Contact:   konelinx@posteo.be
-*/
+// Copyright (C) 2021 Kobe Vrijsen <kobevrijsen@posteo.be>
+// 
+// ActionTree - Tree based decision/action stucture helper. An alternative to branches.
+// 
+// This file is free software and distributed under the terms of the European Union
+// Public Lincense as published by the European Commision; either version 1.2 of the
+// License, or, at your option, any later version.
 
 #pragma once
 
